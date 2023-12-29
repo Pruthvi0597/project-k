@@ -1,0 +1,337 @@
+#TYPE System.Management.Automation.FunctionInfo
+"HelpUri","ScriptBlock","CmdletBinding","DefaultParameterSet","Definition","Options","Description","Verb","Noun","HelpFile","OutputType","Name","CommandType","Source","Version","Visibility","ModuleName","Module","RemotingCapability","Parameters","ParameterSets"
+"","","False",,"","None",,"Add","AzResourceMoverMoveResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Add-AzResourceMoverMoveResource","Function","Az.ResourceMover","1.2.0","Public","Az.ResourceMover","Az.ResourceMover","PowerShell","System.Collections.Generic.Dictionary`2[System.String,System.Management.Automation.ParameterMetadata]","System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"","","False",,"","None",,"Find","DscResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Find-DscResource","Function","PowerShellGet","1.0.0.1","Public","PowerShellGet","PowerShellGet","PowerShell","System.Collections.Generic.Dictionary`2[System.String,System.Management.Automation.ParameterMetadata]","System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"","","False",,"","None",,"Get","AzKustoPrivateLinkResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Get-AzKustoPrivateLinkResource","Function","Az.Kusto","2.3.0","Public","Az.Kusto","Az.Kusto","PowerShell","System.Collections.Generic.Dictionary`2[System.String,System.Management.Automation.ParameterMetadata]","System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"","","False",,"","None",,"Get","AzResourceMoverMoveResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Get-AzResourceMoverMoveResource","Function","Az.ResourceMover","1.2.0","Public","Az.ResourceMover","Az.ResourceMover","PowerShell","System.Collections.Generic.Dictionary`2[System.String,System.Management.Automation.ParameterMetadata]","System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"https://learn.microsoft.com/powershell/module/az.resources/get-azroleeligiblechildresource","
+[OutputType([Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Models.Api20201001Preview.IEligibleChildResource])]
+[CmdletBinding(DefaultParameterSetName='Get', PositionalBinding=$false)]
+param(
+    [Parameter(ParameterSetName='Get', Mandatory)]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Path')]
+    [System.String]
+    # The scope of the role management policy.
+    ${Scope},
+
+    [Parameter(ParameterSetName='GetViaIdentity', Mandatory, ValueFromPipeline)]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Path')]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Models.IAuthorizationIdentity]
+    # Identity Parameter
+    # To construct, see NOTES section for INPUTOBJECT properties and create a hash table.
+    ${InputObject},
+
+    [Parameter()]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Query')]
+    [System.String]
+    # The filter to apply on the operation.
+    # Use $filter=resourceType+eq+'Subscription' to filter on only resource of type = 'Subscription'.
+    # Use $filter=resourceType+eq+'subscription'+or+resourceType+eq+'resourcegroup' to filter on resource of type = 'Subscription' or 'ResourceGroup'
+    ${Filter},
+
+    [Parameter()]
+    [Alias('AzureRMContext', 'AzureCredential')]
+    [ValidateNotNull()]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Azure')]
+    [System.Management.Automation.PSObject]
+    # The DefaultProfile parameter is not functional.
+    # Use the SubscriptionId parameter when available if executing the cmdlet against a different subscription.
+    ${DefaultProfile},
+
+    [Parameter(DontShow)]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Runtime')]
+    [System.Management.Automation.SwitchParameter]
+    # Wait for .NET debugger to attach
+    ${Break},
+
+    [Parameter(DontShow)]
+    [ValidateNotNull()]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Runtime')]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Runtime.SendAsyncStep[]]
+    # SendAsync Pipeline Steps to be appended to the front of the pipeline
+    ${HttpPipelineAppend},
+
+    [Parameter(DontShow)]
+    [ValidateNotNull()]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Runtime')]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Runtime.SendAsyncStep[]]
+    # SendAsync Pipeline Steps to be prepended to the front of the pipeline
+    ${HttpPipelinePrepend},
+
+    [Parameter(DontShow)]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Runtime')]
+    [System.Uri]
+    # The URI for the proxy server to use
+    ${Proxy},
+
+    [Parameter(DontShow)]
+    [ValidateNotNull()]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Runtime')]
+    [System.Management.Automation.PSCredential]
+    # Credentials for a proxy server to use for the remote call
+    ${ProxyCredential},
+
+    [Parameter(DontShow)]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Runtime')]
+    [System.Management.Automation.SwitchParameter]
+    # Use the default credentials for the proxy
+    ${ProxyUseDefaultCredentials}
+)
+
+begin {
+    try {
+        $outBuffer = $null
+        if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer)) {
+            $PSBoundParameters['OutBuffer'] = 1
+        }
+        $parameterSet = $PSCmdlet.ParameterSetName
+
+        if ($null -eq [Microsoft.WindowsAzure.Commands.Utilities.Common.AzurePSCmdlet]::PowerShellVersion) {
+            [Microsoft.WindowsAzure.Commands.Utilities.Common.AzurePSCmdlet]::PowerShellVersion = $PSVersionTable.PSVersion.ToString()
+        }         
+        $preTelemetryId = [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::TelemetryId
+        if ($preTelemetryId -eq '') {
+            [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::TelemetryId =(New-Guid).ToString()
+            [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.module]::Instance.Telemetry.Invoke('Create', $MyInvocation, $parameterSet, $PSCmdlet)
+        } else {
+            $internalCalledCmdlets = [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::InternalCalledCmdlets
+            if ($internalCalledCmdlets -eq '') {
+                [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::InternalCalledCmdlets = $MyInvocation.MyCommand.Name
+            } else {
+                [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::InternalCalledCmdlets += ',' + $MyInvocation.MyCommand.Name
+            }
+            [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::TelemetryId = 'internal'
+        }
+
+        $mapping = @{
+            Get = 'Az.Authorization.private\Get-AzRoleEligibleChildResource_Get';
+            GetViaIdentity = 'Az.Authorization.private\Get-AzRoleEligibleChildResource_GetViaIdentity';
+        }
+        $cmdInfo = Get-Command -Name $mapping[$parameterSet]
+        [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Runtime.MessageAttributeHelper]::ProcessCustomAttributesAtRuntime($cmdInfo, $MyInvocation, $parameterSet, $PSCmdlet)
+        $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand(($mapping[$parameterSet]), [System.Management.Automation.CommandTypes]::Cmdlet)
+        $scriptCmd = {& $wrappedCmd @PSBoundParameters}
+        $steppablePipeline = $scriptCmd.GetSteppablePipeline($MyInvocation.CommandOrigin)
+        $steppablePipeline.Begin($PSCmdlet)
+    } catch {
+        [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::ClearTelemetryContext()
+        throw
+    }
+}
+
+process {
+    try {
+        $steppablePipeline.Process($_)
+    } catch {
+        [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::ClearTelemetryContext()
+        throw
+    }
+
+    finally {
+        $backupTelemetryId = [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::TelemetryId
+        $backupInternalCalledCmdlets = [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::InternalCalledCmdlets
+        [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::ClearTelemetryContext()
+    }
+
+}
+end {
+    try {
+        $steppablePipeline.End()
+
+        [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::TelemetryId = $backupTelemetryId
+        [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::InternalCalledCmdlets = $backupInternalCalledCmdlets
+        if ($preTelemetryId -eq '') {
+            [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.module]::Instance.Telemetry.Invoke('Send', $MyInvocation, $parameterSet, $PSCmdlet)
+            [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::ClearTelemetryContext()
+        }
+        [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::TelemetryId = $preTelemetryId
+
+    } catch {
+        [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::ClearTelemetryContext()
+        throw
+    }
+} 
+","True","Get","
+[OutputType([Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Models.Api20201001Preview.IEligibleChildResource])]
+[CmdletBinding(DefaultParameterSetName='Get', PositionalBinding=$false)]
+param(
+    [Parameter(ParameterSetName='Get', Mandatory)]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Path')]
+    [System.String]
+    # The scope of the role management policy.
+    ${Scope},
+
+    [Parameter(ParameterSetName='GetViaIdentity', Mandatory, ValueFromPipeline)]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Path')]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Models.IAuthorizationIdentity]
+    # Identity Parameter
+    # To construct, see NOTES section for INPUTOBJECT properties and create a hash table.
+    ${InputObject},
+
+    [Parameter()]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Query')]
+    [System.String]
+    # The filter to apply on the operation.
+    # Use $filter=resourceType+eq+'Subscription' to filter on only resource of type = 'Subscription'.
+    # Use $filter=resourceType+eq+'subscription'+or+resourceType+eq+'resourcegroup' to filter on resource of type = 'Subscription' or 'ResourceGroup'
+    ${Filter},
+
+    [Parameter()]
+    [Alias('AzureRMContext', 'AzureCredential')]
+    [ValidateNotNull()]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Azure')]
+    [System.Management.Automation.PSObject]
+    # The DefaultProfile parameter is not functional.
+    # Use the SubscriptionId parameter when available if executing the cmdlet against a different subscription.
+    ${DefaultProfile},
+
+    [Parameter(DontShow)]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Runtime')]
+    [System.Management.Automation.SwitchParameter]
+    # Wait for .NET debugger to attach
+    ${Break},
+
+    [Parameter(DontShow)]
+    [ValidateNotNull()]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Runtime')]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Runtime.SendAsyncStep[]]
+    # SendAsync Pipeline Steps to be appended to the front of the pipeline
+    ${HttpPipelineAppend},
+
+    [Parameter(DontShow)]
+    [ValidateNotNull()]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Runtime')]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Runtime.SendAsyncStep[]]
+    # SendAsync Pipeline Steps to be prepended to the front of the pipeline
+    ${HttpPipelinePrepend},
+
+    [Parameter(DontShow)]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Runtime')]
+    [System.Uri]
+    # The URI for the proxy server to use
+    ${Proxy},
+
+    [Parameter(DontShow)]
+    [ValidateNotNull()]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Runtime')]
+    [System.Management.Automation.PSCredential]
+    # Credentials for a proxy server to use for the remote call
+    ${ProxyCredential},
+
+    [Parameter(DontShow)]
+    [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Category('Runtime')]
+    [System.Management.Automation.SwitchParameter]
+    # Use the default credentials for the proxy
+    ${ProxyUseDefaultCredentials}
+)
+
+begin {
+    try {
+        $outBuffer = $null
+        if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer)) {
+            $PSBoundParameters['OutBuffer'] = 1
+        }
+        $parameterSet = $PSCmdlet.ParameterSetName
+
+        if ($null -eq [Microsoft.WindowsAzure.Commands.Utilities.Common.AzurePSCmdlet]::PowerShellVersion) {
+            [Microsoft.WindowsAzure.Commands.Utilities.Common.AzurePSCmdlet]::PowerShellVersion = $PSVersionTable.PSVersion.ToString()
+        }         
+        $preTelemetryId = [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::TelemetryId
+        if ($preTelemetryId -eq '') {
+            [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::TelemetryId =(New-Guid).ToString()
+            [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.module]::Instance.Telemetry.Invoke('Create', $MyInvocation, $parameterSet, $PSCmdlet)
+        } else {
+            $internalCalledCmdlets = [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::InternalCalledCmdlets
+            if ($internalCalledCmdlets -eq '') {
+                [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::InternalCalledCmdlets = $MyInvocation.MyCommand.Name
+            } else {
+                [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::InternalCalledCmdlets += ',' + $MyInvocation.MyCommand.Name
+            }
+            [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::TelemetryId = 'internal'
+        }
+
+        $mapping = @{
+            Get = 'Az.Authorization.private\Get-AzRoleEligibleChildResource_Get';
+            GetViaIdentity = 'Az.Authorization.private\Get-AzRoleEligibleChildResource_GetViaIdentity';
+        }
+        $cmdInfo = Get-Command -Name $mapping[$parameterSet]
+        [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.Runtime.MessageAttributeHelper]::ProcessCustomAttributesAtRuntime($cmdInfo, $MyInvocation, $parameterSet, $PSCmdlet)
+        $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand(($mapping[$parameterSet]), [System.Management.Automation.CommandTypes]::Cmdlet)
+        $scriptCmd = {& $wrappedCmd @PSBoundParameters}
+        $steppablePipeline = $scriptCmd.GetSteppablePipeline($MyInvocation.CommandOrigin)
+        $steppablePipeline.Begin($PSCmdlet)
+    } catch {
+        [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::ClearTelemetryContext()
+        throw
+    }
+}
+
+process {
+    try {
+        $steppablePipeline.Process($_)
+    } catch {
+        [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::ClearTelemetryContext()
+        throw
+    }
+
+    finally {
+        $backupTelemetryId = [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::TelemetryId
+        $backupInternalCalledCmdlets = [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::InternalCalledCmdlets
+        [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::ClearTelemetryContext()
+    }
+
+}
+end {
+    try {
+        $steppablePipeline.End()
+
+        [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::TelemetryId = $backupTelemetryId
+        [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::InternalCalledCmdlets = $backupInternalCalledCmdlets
+        if ($preTelemetryId -eq '') {
+            [Microsoft.Azure.PowerShell.Cmdlets.Resources.Authorization.module]::Instance.Telemetry.Invoke('Send', $MyInvocation, $parameterSet, $PSCmdlet)
+            [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::ClearTelemetryContext()
+        }
+        [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::TelemetryId = $preTelemetryId
+
+    } catch {
+        [Microsoft.WindowsAzure.Commands.Common.MetricHelper]::ClearTelemetryContext()
+        throw
+    }
+} 
+","None",,"Get","AzRoleEligibleChildResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Get-AzRoleEligibleChildResource","Function","Az.Resources","6.12.1","Public","Az.Resources","Az.Resources","PowerShell","System.Collections.Generic.Dictionary`2[System.String,System.Management.Automation.ParameterMetadata]","System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"","","False",,"","None",,"Get","AzUserAssignedIdentityAssociatedResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Get-AzUserAssignedIdentityAssociatedResource","Function","Az.ManagedServiceIdentity","1.2.0","Public","Az.ManagedServiceIdentity","Az.ManagedServiceIdentity","PowerShell","System.Collections.Generic.Dictionary`2[System.String,System.Management.Automation.ParameterMetadata]","System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"","","False",,"","None",,"Get","AzWvdPrivateLinkResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Get-AzWvdPrivateLinkResource","Function","Az.DesktopVirtualization","4.2.0","Public","Az.DesktopVirtualization","Az.DesktopVirtualization","PowerShell","System.Collections.Generic.Dictionary`2[System.String,System.Management.Automation.ParameterMetadata]","System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"","","False",,"","None",,"Get","DscResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Get-DscResource","Function","PSDesiredStateConfiguration","1.1","Public","PSDesiredStateConfiguration","PSDesiredStateConfiguration","PowerShell","System.Collections.Generic.Dictionary`2[System.String,System.Management.Automation.ParameterMetadata]","System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"","","False",,"","None",,"Remove","AzResourceMoverMoveResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Remove-AzResourceMoverMoveResource","Function","Az.ResourceMover","1.2.0","Public","Az.ResourceMover","Az.ResourceMover","PowerShell","System.Collections.Generic.Dictionary`2[System.String,System.Management.Automation.ParameterMetadata]","System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"",,,"__AllParameterSets","Get-AzCosmosDBGremlinRestorableResource
+","ReadOnly",,"Get","AzCosmosDBGremlinRestorableResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Get-AzCosmosDBGremlinRestorableResource","Cmdlet","Az.CosmosDB","1.13.0","Public","Az.CosmosDB","Az.CosmosDB","PowerShell",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"",,,"__AllParameterSets","Get-AzCosmosDBMongoDBRestorableResource
+","ReadOnly",,"Get","AzCosmosDBMongoDBRestorableResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Get-AzCosmosDBMongoDBRestorableResource","Cmdlet","Az.CosmosDB","1.13.0","Public","Az.CosmosDB","Az.CosmosDB","PowerShell",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"",,,"__AllParameterSets","Get-AzCosmosDBSqlRestorableResource
+","ReadOnly",,"Get","AzCosmosDBSqlRestorableResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Get-AzCosmosDBSqlRestorableResource","Cmdlet","Az.CosmosDB","1.13.0","Public","Az.CosmosDB","Az.CosmosDB","PowerShell",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"",,,"__AllParameterSets","Get-AzCosmosDBTableRestorableResource
+","ReadOnly",,"Get","AzCosmosDBTableRestorableResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Get-AzCosmosDBTableRestorableResource","Cmdlet","Az.CosmosDB","1.13.0","Public","Az.CosmosDB","Az.CosmosDB","PowerShell",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"",,,"__AllParameterSets","Get-AzDiskEncryptionSetAssociatedResource
+","ReadOnly",,"Get","AzDiskEncryptionSetAssociatedResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Get-AzDiskEncryptionSetAssociatedResource","Cmdlet","Az.Compute","7.1.0","Public","Az.Compute","Az.Compute","PowerShell",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"https://learn.microsoft.com/powershell/module/az.monitor/get-azinsightsprivatelinkscopedresource",,,"__AllParameterSets","Get-AzInsightsPrivateLinkScopedResource
+","ReadOnly",,"Get","AzInsightsPrivateLinkScopedResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Get-AzInsightsPrivateLinkScopedResource","Cmdlet","Az.Monitor","0.0","Public","Az.Monitor","Az.Monitor","PowerShell",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"",,,"__AllParameterSets","Get-AzPrivateLinkResource
+","ReadOnly",,"Get","AzPrivateLinkResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Get-AzPrivateLinkResource","Cmdlet","Az.Network","7.1.0","Public","Az.Network","Az.Network","PowerShell",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"https://learn.microsoft.com/powershell/module/az.resources/get-azresource",,,"__AllParameterSets","Get-AzResource
+","ReadOnly",,"Get","AzResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Get-AzResource","Cmdlet","Az.Resources","0.0","Public","Az.Resources","Az.Resources","PowerShell",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"",,,"__AllParameterSets","Invoke-DscResource
+","ReadOnly",,"Invoke","DscResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Invoke-DscResource","Cmdlet","PSDesiredStateConfiguration","1.1","Public","PSDesiredStateConfiguration","PSDesiredStateConfiguration","PowerShell",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"https://learn.microsoft.com/powershell/module/az.resources/move-azresource",,,"__AllParameterSets","Move-AzResource
+","ReadOnly",,"Move","AzResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Move-AzResource","Cmdlet","Az.Resources","0.0","Public","Az.Resources","Az.Resources","PowerShell",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"",,,"__AllParameterSets","New-AzCosmosDBMongoDBPrivilegeResource
+","ReadOnly",,"New","AzCosmosDBMongoDBPrivilegeResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","New-AzCosmosDBMongoDBPrivilegeResource","Cmdlet","Az.CosmosDB","1.13.0","Public","Az.CosmosDB","Az.CosmosDB","PowerShell",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"https://learn.microsoft.com/powershell/module/az.monitor/new-azinsightsprivatelinkscopedresource",,,"__AllParameterSets","New-AzInsightsPrivateLinkScopedResource
+","ReadOnly",,"New","AzInsightsPrivateLinkScopedResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","New-AzInsightsPrivateLinkScopedResource","Cmdlet","Az.Monitor","0.0","Public","Az.Monitor","Az.Monitor","PowerShell",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"https://learn.microsoft.com/powershell/module/az.resources/new-azresource",,,"__AllParameterSets","New-AzResource
+","ReadOnly",,"New","AzResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","New-AzResource","Cmdlet","Az.Resources","0.0","Public","Az.Resources","Az.Resources","PowerShell",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"https://learn.microsoft.com/powershell/module/az.monitor/remove-azinsightsprivatelinkscopedresource",,,"__AllParameterSets","Remove-AzInsightsPrivateLinkScopedResource
+","ReadOnly",,"Remove","AzInsightsPrivateLinkScopedResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Remove-AzInsightsPrivateLinkScopedResource","Cmdlet","Az.Monitor","0.0","Public","Az.Monitor","Az.Monitor","PowerShell",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"https://learn.microsoft.com/powershell/module/az.resources/remove-azresource",,,"__AllParameterSets","Remove-AzResource
+","ReadOnly",,"Remove","AzResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Remove-AzResource","Cmdlet","Az.Resources","0.0","Public","Az.Resources","Az.Resources","PowerShell",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
+"https://learn.microsoft.com/powershell/module/az.resources/set-azresource",,,"__AllParameterSets","Set-AzResource
+","ReadOnly",,"Set","AzResource",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.PSTypeName]","Set-AzResource","Cmdlet","Az.Resources","0.0","Public","Az.Resources","Az.Resources","PowerShell",,"System.Collections.ObjectModel.ReadOnlyCollection`1[System.Management.Automation.CommandParameterSetInfo]"
